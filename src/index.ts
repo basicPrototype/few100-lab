@@ -12,6 +12,8 @@ const listTipPercent = document.getElementById('listTipPercent') as HTMLSpanElem
 const listTipAmount = document.getElementById('listTipAmount') as HTMLSpanElement;
 const listTotalBill = document.getElementById('listTotalBill') as HTMLSpanElement;
 
+const chkRememberTip = document.getElementById('chkRememberTip') as HTMLInputElement;
+
 let currentTipValue = 0;
 
 // handle events
@@ -54,6 +56,10 @@ function handleTipButtonClick() {
             btn.setAttribute('disabled', 'disabled');
             currentTipValue = parsePercent(that.innerText);
             tipAmountSpan.innerText = that.innerText;
+
+            if (chkRememberTip.checked) {
+                localStorage.setItem('tipValue', that.innerText);
+            }
         } else {
             btn.removeAttribute('disabled');
         }
@@ -113,3 +119,4 @@ function updateListValues() {
     }
 
 }
+

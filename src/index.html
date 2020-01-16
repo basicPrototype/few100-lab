@@ -26,16 +26,29 @@
                        aria-label="Bill Amount"
                        id="billAmount">
             </div>
-            <div class="btn-group"
-                 role="group"
-                 aria-label="Basic example">
-                <button type="button"
-                        class="btn btn-secondary tipButton">10%</button>
-                <button type="button"
-                        class="btn btn-secondary tipButton">15%</button>
-                <button type="button"
-                        class="btn btn-secondary tipButton">20%</button>
-            </div>
+            <form class="form-inline">
+                <div class="btn-group mb-2"
+                     role="group"
+                     aria-label="Basic example">
+                    <button type="button"
+                            class="btn btn-secondary tipButton">10%</button>
+                    <button type="button"
+                            class="btn btn-secondary tipButton">15%</button>
+                    <button type="button"
+                            class="btn btn-secondary tipButton">20%</button>
+                </div>
+                <div class="form-check mx-sm-3 mb-2">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           value=""
+                           id="chkRememberTip">
+                    <label class="form-check-label"
+                           for="defaultCheck1">
+                        Remember tip value
+                    </label>
+                </div>
+            </form>
+
             <p>You are tipping <span id="tipAmount"></span></p>
             <ul class="list-group">
                 <li class="list-group-item">Bill Amount: $<span id="listBillAmount"></span></li>
