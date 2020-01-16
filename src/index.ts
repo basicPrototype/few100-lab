@@ -28,6 +28,11 @@ function handleTipButtonClick() {
     tipButtons.forEach(btn => {
         if (btn === this) {
             that.removeEventListener('click', handleTipButtonClick);
+            that.classList.add('tipClicked');
+        } else {
+            // https://stackoverflow.com/a/47337711 gave me permission
+            btn.addEventListener('click', handleTipButtonClick);
+            btn.classList.remove('tipClicked');
         }
     });
 
