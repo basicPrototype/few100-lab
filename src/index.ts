@@ -65,6 +65,8 @@ function handleTipButtonClick() {
 
 }
 
+
+// handle all the list updating
 function updateListBillAmount(amt: number) {
     console.log('updating bill amount');
     listBillAmount.innerText = amt.toFixed(2);
@@ -95,11 +97,14 @@ function clearListValues() {
 function updateListValues() {
     if (billAmountValid && tipAmountSelected) {
 
+        // math
         const enteredBillValue = enteredBillAmount.valueAsNumber;
         const tipString = tipAmountSpan.innerText;
         const tipPercent = parsePercent(tipString);
         const tipAmount = enteredBillValue * tipPercent;
         const totalAmount = enteredBillValue + tipAmount;
+
+        // formatting
         updateListBillAmount(enteredBillValue);
         updateListTipPercent(tipString);
         updateListTipAmount(tipAmount);
