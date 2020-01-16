@@ -1,20 +1,43 @@
 import './styles.css';
+import { parsePercent } from './util';
 
 // jeff sez get stuff we care about
-const billAmount = document.getElementById('billAmount') as HTMLInputElement;
-const tipButtons = document.querySelectorAll('.tipButton') as NodeListOf<HTMLDivElement>;
+const enteredBillAmount = document.getElementById('billAmount') as HTMLInputElement;
 
+const tipButtons = document.querySelectorAll('.tipButton') as NodeListOf<HTMLDivElement>;
+const tipAmountSpan = document.getElementById('tipAmount') as HTMLSpanElement;
+
+const listBillAmount = document.getElementById('listBillAmount') as HTMLSpanElement;
+const listTipPercent = document.getElementById('listTipPercent') as HTMLSpanElement;
+const listTipAmount = document.getElementById('listTipAmount') as HTMLSpanElement;
+const listTotalBill = document.getElementById('listTotalBill') as HTMLSpanElement;
+
+let currentTipValue = 0;
 
 // handle events
-billAmount.addEventListener('input', handleTextEntry);
+enteredBillAmount.addEventListener('input', handleTextEntry);
+
+let billAmountValid = false;
+let tipAmountSelected = false;
 
 function handleTextEntry() {
-    const enteredValue = billAmount.valueAsNumber;
+    const enteredValue = enteredBillAmount.valueAsNumber;
+
+    // handle input error
     if (enteredValue < 0) {
-        billAmount.classList.add('inputError');
+        enteredBillAmount.classList.add('inputError');
     } else {
-        billAmount.classList.remove('inputError');
+        enteredBillAmount.classList.remove('inputError');
     }
+
+    if (enteredValue > 0) {
+        billAmountValid = true;
+    } else {
+        billAmountValid = false;
+    }
+
+    updateListValues();
+
 }
 
 // add click handler to tip buttons
@@ -23,18 +46,66 @@ tipButtons.forEach(btn => {
 });
 
 function handleTipButtonClick() {
+    tipAmountSelected = true;
     const that = this as HTMLDivElement;
     console.log(that.innerText);
     tipButtons.forEach(btn => {
         if (btn === this) {
             that.removeEventListener('click', handleTipButtonClick);
             that.classList.add('tipClicked');
+            currentTipValue = parsePercent(that.innerText);
+            tipAmountSpan.innerText = that.innerText;
         } else {
             // https://stackoverflow.com/a/47337711 gave me permission
             btn.addEventListener('click', handleTipButtonClick);
             btn.classList.remove('tipClicked');
         }
     });
+    updateListValues();
 
 }
-console.log(tipButtons);
+
+function updateListBillAmount(amt: number) {
+    console.log('updating bill amount');
+    listBillAmount.innerText = amt.toFixed(2);
+}
+
+function updateListTipPercent(displayPercent: string) {
+    console.log('updating tip percent');
+    // this is hokey but i'm too lazy to fix it
+    listTipPercent.innerText = displayPercent;
+}
+
+function updateListTipAmount(amt: number) {
+    listTipAmount.innerText = amt.toFixed(2);
+}
+
+function updateListTotalBill(amt: number) {
+    listTotalBill.innerText = amt.toFixed(2);
+}
+
+function clearListValues() {
+    console.log('clearing list values');
+    listBillAmount.innerText = '';
+    listTipPercent.innerText = '';
+    listTipAmount.innerText = '';
+    listTotalBill.innerText = '';
+}
+
+function updateListValues() {
+    if (billAmountValid && tipAmountSelected) {
+
+        const enteredBillValue = enteredBillAmount.valueAsNumber;
+        const tipString = tipAmountSpan.innerText;
+        const tipPercent = parsePercent(tipString);
+        const tipAmount = enteredBillValue * tipPercent;
+        const totalAmount = enteredBillValue + tipAmount;
+        updateListBillAmount(enteredBillValue);
+        updateListTipPercent(tipString);
+        updateListTipAmount(tipAmount);
+        updateListTotalBill(totalAmount);
+    } else {
+        clearListValues();
+    }
+
+}
