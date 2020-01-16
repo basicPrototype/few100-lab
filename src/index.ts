@@ -75,6 +75,8 @@ function updateListBillAmount(amt: number) {
 function updateListTipPercent(displayPercent: string) {
     console.log('updating tip percent');
     // this is hokey but i'm too lazy to fix it
+    // tip percent (as a string) was stashed in the label below the tip buttons when we figured it out.
+    // just grabbing from there
     listTipPercent.innerText = displayPercent;
 }
 
