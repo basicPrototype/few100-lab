@@ -51,14 +51,11 @@ function handleTipButtonClick() {
     console.log(that.innerText);
     tipButtons.forEach(btn => {
         if (btn === this) {
-            that.removeEventListener('click', handleTipButtonClick);
-            that.classList.add('tipClicked');
+            btn.setAttribute('disabled', 'disabled');
             currentTipValue = parsePercent(that.innerText);
             tipAmountSpan.innerText = that.innerText;
         } else {
-            // https://stackoverflow.com/a/47337711 gave me permission
-            btn.addEventListener('click', handleTipButtonClick);
-            btn.classList.remove('tipClicked');
+            btn.removeAttribute('disabled');
         }
     });
     updateListValues();
@@ -101,8 +98,8 @@ function updateListValues() {
 
         // math
         const enteredBillValue = enteredBillAmount.valueAsNumber;
-        const tipString = tipAmountSpan.innerText;
-        const tipPercent = parsePercent(tipString);
+        const tipString = tipAmountSpan.innerText; // since we figuered it out before
+        const tipPercent = currentTipValue;
         const tipAmount = enteredBillValue * tipPercent;
         const totalAmount = enteredBillValue + tipAmount;
 
