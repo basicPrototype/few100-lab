@@ -15,6 +15,8 @@ const listTotalBill = document.getElementById('listTotalBill') as HTMLSpanElemen
 const chkRememberTip = document.getElementById('chkRememberTip') as HTMLInputElement;
 
 let currentTipValue = 0;
+const localStorageCheckbox = 'rememberTip';
+const localStorageTipValue = 'tipValue';
 
 // handle events
 enteredBillAmount.addEventListener('input', handleTextEntry);
@@ -58,7 +60,7 @@ function handleTipButtonClick() {
             tipAmountSpan.innerText = that.innerText;
 
             if (chkRememberTip.checked) {
-                localStorage.setItem('tipValue', that.innerText);
+                localStorage.setItem(localStorageTipValue, that.innerText);
             }
         } else {
             btn.removeAttribute('disabled');
@@ -120,3 +122,29 @@ function updateListValues() {
 
 }
 
+chkRememberTip.addEventListener('click', handleCheckboxRememberTip);
+
+function handleCheckboxRememberTip() {
+    const that = this as HTMLInputElement;
+    if (that.checked) {
+        localStorage.setItem(localStorageCheckbox, 'checked');
+        if (currentTipValue > 0) {
+            localStorage.setItem(localStorageTipValue, tipAmountSpan.innerText);
+        }
+    } else {
+        localStorage.removeItem(localStorageCheckbox);
+        localStorage.removeItem(localStorageTipValue);
+    }
+}
+window.addEventListener('load', pageLoadStuff);
+
+function pageLoadStuff() {
+    if (localStorage.getItem(localStorageCheckbox)) {
+        chkRememberTip.checked = true;
+        tipButtons.forEach(btn => {
+            if (btn.innerText === localStorage.getItem(localStorageTipValue)) {
+                btn.click();
+            }
+        });
+    }
+}
